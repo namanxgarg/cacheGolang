@@ -34,6 +34,31 @@ func newQueue() Queue {
 func (c *Cache) Check(str string){
 	node:=&Node{}
 	
+	if val, ok:=c.Hash[str]; ok{
+		node= c.Remove(val)
+	}else{
+		node=&Node{Val: str}
+	}
+	c.Add(node)
+}
+
+func (c *Cache) Remove(n *Node) *Node{
+	fmt.Printf("remove: %s\n", n.Val)
+	left:=n.Left
+	right:=n.Right
+	right.Left=left
+	left.Right=right
+	c.Queue.Length-=1;
+	delete(c.Hash, n.Val)
+	return n
+}
+
+func (c *Cache) Add(n *Node) *Node{
+	fmt.Printf("add %s\n", n.Val)
+	tmp:=c.Queue.Head.Right
+
+	c.Queue.Head.Right=n
+	
 }
 
 type Hash map[string]*Node
